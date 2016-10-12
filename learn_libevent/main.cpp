@@ -25,11 +25,11 @@ using namespace std;
 
 int main() {
     struct event_base *eb;
-    eb = event_base_new();
-    if (!eb) {
-        cout << "open event base error!" << endl;
-        return -1;
-    }
+//    eb = event_base_new();
+//    if (!eb) {
+//        cout << "open event base error!" << endl;
+//        return -1;
+//    }
 //
 //    struct timeval tv;
 //    tv.tv_sec = 1;
