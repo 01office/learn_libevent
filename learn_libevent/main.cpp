@@ -26,7 +26,7 @@ int main() {
     }
 
     timeval tv;
-    tv.tv_sec = 1;
+    tv.tv_sec = 2;
     tv.tv_usec = 0;
     
     event *ev = event_new(eb, -1, EV_PERSIST | EV_TIMEOUT, my_cb, NULL);
