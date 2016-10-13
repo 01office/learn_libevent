@@ -25,7 +25,7 @@ using namespace std;
 
 int main() {
     struct event_base *eb;
-//    eb = event_base_new();
+    eb = event_base_new();
 //    if (!eb) {
 //        cout << "open event base error!" << endl;
 //        return -1;
