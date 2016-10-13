@@ -8,34 +8,28 @@
 
 #include <iostream>
 
-#include "event2/event.h"
+#include <event2/event.h>
 
 using namespace std;
 
-void onTime(int sock, short event, void *arg)
+void my_cb(evutil_socket_t fd, short what, void *arg)
 {
-    cout << "Game Over!" << endl;
-    
-    struct timeval tv;
-    tv.tv_sec = 1;
-    tv.tv_usec = 0;
-    
-    event_add((struct event *)arg, &tv);
+    cout << "event occrence every 2 seconds." << endl;
 }
 
 int main() {
-    struct event_base *eb;
+    event_base *eb;
     eb = event_base_new();
     if (!eb) {
         cout << "open event base error!" << endl;
         return -1;
     }
 
-    struct timeval tv;
+    timeval tv;
     tv.tv_sec = 1;
     tv.tv_usec = 0;
     
-    struct event *ev = event_new(eb, -1, EV_PERSIST | EV_TIMEOUT, onTime, NULL);
+    event *ev = event_new(eb, -1, EV_PERSIST | EV_TIMEOUT, my_cb, NULL);
     
     event_add(ev, &tv);
     
