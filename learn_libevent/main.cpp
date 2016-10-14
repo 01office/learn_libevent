@@ -31,6 +31,8 @@ int main() {
     
     event *ev = event_new(eb, -1, EV_PERSIST | EV_TIMEOUT, my_cb, NULL);
     
+    evutil_socket_t evfd = event_get_fd(ev);
+    
     event_add(ev, &tv);
     
     event_base_dispatch(eb);
