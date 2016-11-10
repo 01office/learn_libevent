@@ -7,8 +7,10 @@
 //
 
 #include <iostream>
+#include <sys/types.h>
 
 #include <event2/event.h>
+#include <evhttp.h>
 
 using namespace std;
 
@@ -17,25 +19,50 @@ void my_cb(evutil_socket_t fd, short what, void *arg)
     cout << "event occrence every 2 seconds." << endl;
 }
 
-int main() {
-    event_base *eb;
-    eb = event_base_new();
-    if (!eb) {
-        cout << "open event base error!" << endl;
-        return -1;
-    }
+void generic_request_handler(struct evhttp_request *req, void *arg)
+{
+    struct evbuffer *returnbuffer = evbuffer_new();
+    
+    evbuffer_add_printf(returnbuffer, "Thanks for the request!");
+    evhttp_send_reply(req, HTTP_OK, "Client", returnbuffer);
+    evbuffer_free(returnbuffer);
+    
+    return;
+}
 
-    timeval tv;
-    tv.tv_sec = 2;
-    tv.tv_usec = 0;
+int main() {
+//    event_base *eb;
+//    eb = event_base_new();
+//    if (!eb) {
+//        cout << "open event base error!" << endl;
+//        return -1;
+//    }
+//
+//    timeval tv;
+//    tv.tv_sec = 2;
+//    tv.tv_usec = 0;
+//    
+//    event *ev = event_new(eb, -1, EV_PERSIST | EV_TIMEOUT, my_cb, NULL);
+//    
+//    evutil_socket_t evfd = event_get_fd(ev);
+//    
+//    event_add(ev, &tv);
+//    
+//    event_base_dispatch(eb);
+//    
+//    return 0;
     
-    event *ev = event_new(eb, -1, EV_PERSIST | EV_TIMEOUT, my_cb, NULL);
+    short http_port = 8999;
+    char *http_addr = "192.168.0.22";
+    struct evhttp *http_server = NULL;
     
-    evutil_socket_t evfd = event_get_fd(ev);
+    event_init();
+    http_server = evhttp_start(http_addr, http_port);
+    evhttp_set_gencb(http_server, generic_request_handler, NULL);
     
-    event_add(ev, &tv);
+    fprintf(stderr, "Server started on port %d\n", http_port);
     
-    event_base_dispatch(eb);
+    event_dispatch();
     
     return 0;
 }
