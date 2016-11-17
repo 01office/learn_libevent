@@ -53,7 +53,7 @@ int main() {
 //    return 0;
     
     short http_port = 8999;
-    char *http_addr = "192.168.0.22";
+    char *http_addr = "127.0.0.1";
     struct evhttp *http_server = NULL;
     
     event_init();
